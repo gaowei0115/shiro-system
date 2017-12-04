@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <description>Shiro Configuration</description>
+
+    <!-- 核心配置验证管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!-- 缓存管理器 -->
+        <!--<property name="cacheManager" ref="cacheManager"/>-->
+        <!--<property name="realm" ref="loginRealm"/>-->
+        <!-- 多个realm认证 -->
+        <!--<property name="realms">-->
+        <!--<list>-->
+        <!--<ref bean="loginRealm"/>-->
+        <!--<ref bean="loginRealm2"/>-->
+        <!--</list>-->
+        <!--</property>-->
+        <!-- 引用modularRealmAuthorizer实现多个realm认证
+            多个realm认证，如果存在都能认证成功，可以通过配置认证策略，如果一个realm证认成功，不在执行第二个。
+            AuthenticationStrategy：认证策略
+        -->
+        <property name="authenticator" ref="modularRealmAuthenticator"/>
+    </bean>
+
+    <!-- 多个realm认证 -->
+    <bean id="modularRealmAuthenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+        <property name="realms">
+            <list>
+                <ref bean="loginRealm"/>
+                <ref bean="loginRealm2"/>
+            </list>
+        </property>
+        <!-- 添加认证策略 -->
+        <property name="authenticationStrategy">
+            <!-- 必须所有的认证成功才能通过 -->
+            <bean class="org.apache.shiro.authc.pam.AllSuccessfulStrategy"/>
+        </property>
+    </bean>
+
+    <bean id="loginRealm" class="com.shiro.mmc.system.web.premission.shiro.realm.LoginRealm">
+        <!-- 指定realm的加密算法 -->
+        <property name="credentialsMatcher">
+            <!-- 加密 -->
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <!-- 加密算法指定 -->
+                <property name="hashAlgorithmName" value="MD5"/>
+                <!-- 加密次数 -->
+                <property name="hashIterations" value="1024"/>
+                <!--
+                    realm 登录时异常解决
+                    org.apache.shiro.crypto.CryptoException: Unable to execute 'doFinal' with cipher instance [javax.crypto.Cipher@dc89d5e].
+                -->
+                <property name="storedCredentialsHexEncoded" value="true"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="loginRealm2" class="com.shiro.mmc.system.web.premission.shiro.realm.UserRealm">
+        <!-- 指定realm的加密算法 -->
+        <property name="credentialsMatcher">
+            <!-- 加密 -->
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <!-- 加密算法指定 -->
+                <property name="hashAlgorithmName" value="SHA-1"/>
+                <!-- 加密次数 -->
+                <property name="hashIterations" value="1024"/>
+                <!--
+                    realm 异常解决
+                    org.apache.shiro.crypto.CryptoException: Unable to execute 'doFinal' with cipher instance [javax.crypto.Cipher@dc89d5e].
+                -->
+                <property name="storedCredentialsHexEncoded" value="true"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!-- 启用shrio注解，依赖 lifecycleBeanPostProcessor-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <!-- 配置shiroFilter
+        id需与web.xml中配置的DelegatingFilterProxy配置file-name一致
+    -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 验证管理器 -->
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 登录页面 -->
+        <property name="loginUrl" value="/toLogin"/>
+        <property name="successUrl" value="/list.jsp"/>
+        <!--
+               配置那些页面需要权限验证
+               anon ：可以匿名访问
+               authc:需要认证之后才能访问（登录之后）
+               logout:登出认证过滤器
+        -->
+        <property name="filterChainDefinitions">
+            <value>
+                /login.jsp = anon
+                /login = anon
+                /logout = logout
+                /bootstrap/css/**=anon
+                /bootstrap/js/**=anon
+                /bootstrap/**=anon
+                /common/**=anon
+                /css/**=anon
+                /js/**=anon
+                /images/**=anon
+                /static/**=anon
+                # everything else requires authentication:
+                /** = authc
+            </value>
+        </property>
+    </bean>
+</beans>
