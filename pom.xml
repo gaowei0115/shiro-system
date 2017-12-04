@@ -10,7 +10,8 @@
 	<description></description>
 	<modules>
 		<module>shiro-web-integration</module>
-	</modules>
+        <module>shiro-web-premission</module>
+    </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
