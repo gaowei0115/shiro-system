@@ -11,6 +11,8 @@
 	<modules>
 		<module>shiro-web-integration</module>
         <module>shiro-web-premission</module>
+        <module>shiro-authorization</module>
+        <module>shiro-session</module>
     </modules>
 
 	<properties>

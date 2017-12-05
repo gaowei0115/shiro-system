@@ -38,7 +38,7 @@
         <div class="row" style="border: 0px !important;"></div>
         <div><img class="center-block margin-height" alt="" src="images/sys_logo.png" title="logo" width="100" height="100"></div>
         <h4 class="login_h1_font">玩玩登录APP</h4>
-        <form id="loginForm" class="form-horizontal" action="" method="post">
+        <form id="loginForm" class="form-horizontal" action="login" method="post">
 
             <div class="form-group">
                 <input type="text" class="form-control " id="loginCode" name="loginCode" placeholder="请输入用户名" />
