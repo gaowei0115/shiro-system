@@ -27,8 +27,8 @@ public class JDBCTemplateUtils {
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
         ds.setUrl("jdbc:mysql://localhost:3306/shiro_db?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT ");
         ds.setUsername("root");
-        ds.setPassword("root");
-
+//        ds.setPassword("root");
+        ds.setPassword("rootroot");
         return new JdbcTemplate(ds);
     }
 

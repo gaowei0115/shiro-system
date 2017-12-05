@@ -1,7 +1,8 @@
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.apache.shiro.session.mgt.OnlineSession" %>
-<%@ page import="com.github.zhangkaitao.shiro.chapter10.session.dao.MySessionDAO" %>
+<%@ page import="com.shiro.mmc.system.session.AutoSessionDao" %>
 <%@ page import="java.io.Serializable" %>
+<%@ page import="org.apache.shiro.session.Session" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html>
@@ -20,9 +21,10 @@
     %>
     <br/>
     <%
-        MySessionDAO sessionDAO = new MySessionDAO();
+        AutoSessionDao sessionDAO = new AutoSessionDao();
         Serializable sessionId = SecurityUtils.getSubject().getSession().getId();
-        OnlineSession onlineSession = (OnlineSession)sessionDAO.readSession(sessionId);
+        OnlineSession onlineSession = (OnlineSession) sessionDAO.readSession(sessionId);
+        out.println(onlineSession.toString());
         out.print(onlineSession.getStatus().getInfo());
     %>
 </shiro:user>
