@@ -23,4 +23,19 @@ public class IndexController {
     public String toIndex() {
         return "index";
     }
+
+    @RequestMapping(value = "/toUserPage", method = {RequestMethod.GET, RequestMethod.POST})
+    public String toUserPage() {
+        return "user";
+    }
+
+    @RequestMapping(value = "/toAdminPage", method = {RequestMethod.GET, RequestMethod.POST})
+    public String toAdminPage() {
+        return "admin";
+    }
+
+    @RequestMapping(value = "/toUnauthorizedPage", method = {RequestMethod.GET, RequestMethod.POST})
+    public String toUnauthorizedPage() {
+        return "unauthorized";
+    }
 }

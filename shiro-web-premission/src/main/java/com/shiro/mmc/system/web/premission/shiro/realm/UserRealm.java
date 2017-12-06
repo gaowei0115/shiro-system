@@ -66,7 +66,7 @@ public class UserRealm extends AuthenticatingRealm{
          * 可以使用salt区分某个用户的密码加密之后的唯一性，确定salt取值问题，可以使用登录用户作为盐值，登录用户名是唯一的
          */
         ByteSource credentialsSalt = ByteSource.Util.bytes(userName);
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo("realm2", credentials, credentialsSalt, realmName);
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principal, credentials, credentialsSalt, realmName);
 
         return authenticationInfo;
     }

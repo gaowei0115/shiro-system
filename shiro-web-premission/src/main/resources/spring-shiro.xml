@@ -76,14 +76,14 @@
     </bean>
 
 
-    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>-->
 
     <!-- 启用shrio注解，依赖 lifecycleBeanPostProcessor-->
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-          depends-on="lifecycleBeanPostProcessor"/>
-    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
-    </bean>
+    <!--<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"-->
+          <!--depends-on="lifecycleBeanPostProcessor"/>-->
+    <!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
+        <!--<property name="securityManager" ref="securityManager"/>-->
+    <!--</bean>-->
 
     <!-- 配置shiroFilter
         id需与web.xml中配置的DelegatingFilterProxy配置file-name一致
@@ -94,6 +94,7 @@
         <!-- 登录页面 -->
         <property name="loginUrl" value="/toLogin"/>
         <property name="successUrl" value="/list.jsp"/>
+        <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
         <!--
                配置那些页面需要权限验证
                anon ：可以匿名访问
@@ -113,6 +114,9 @@
                 /js/**=anon
                 /images/**=anon
                 /static/**=anon
+
+                /user.jsp = roles[user]
+                /admin.jsp = roles[admin]
                 # everything else requires authentication:
                 /** = authc
             </value>

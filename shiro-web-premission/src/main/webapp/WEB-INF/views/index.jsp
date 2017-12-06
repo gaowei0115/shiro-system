@@ -13,6 +13,13 @@
 <body>
     <h1>index.....</h1>
 
+    <br><br>
+    <a href="user.jsp">user page</a>
+
+    <br><br>
+    <a href="admin.jsp">admin page</a>
+    <br><br>
+
     <a href="logout">logout</a>
 </body>
 </html>
