@@ -1,11 +1,19 @@
 package com.shiro.mmc.system.web.premission.shiro.realm;
 
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthenticatingRealm;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @packageName：com.shiro.mmc.system.web.premission.shiro.realm
@@ -14,10 +22,49 @@ import org.slf4j.LoggerFactory;
  * @date： 2017/12/4 21:40
  * @history: (version) author date desc
  */
-public class UserRealm extends AuthenticatingRealm{
+public class UserRealm extends AuthorizingRealm {
 
     private static final Logger log = LoggerFactory.getLogger(UserRealm.class);
 
+    /**
+     * 授权操作
+     * @param principalCollection
+     * @return
+     */
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        if (principalCollection == null) {
+            throw new AuthorizationException(
+                    "PrincipalCollection method argument cannot be null.");
+        }
+
+        if (principalCollection == null) {
+            throw new AuthorizationException(
+                    "PrincipalCollection method argument cannot be null.");
+        }
+
+        String userName = (String) getAvailablePrincipal(principalCollection);
+        // 模拟用户角色
+        Set<String> roles = new HashSet<>();
+        if ("user".equals(userName)) {
+            roles.add("user");
+        } else if ("admin".equals(userName)) {
+            roles.add("admin");
+        } else {
+            roles.add("user");
+            roles.add("admin");
+        }
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        info.addRoles(roles);
+        return info;
+    }
+
+    /**
+     * 认证操作
+     * @param token
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         log.debug("进入 userRealm {}", token);

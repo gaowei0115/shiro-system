@@ -21,7 +21,13 @@
             多个realm认证，如果存在都能认证成功，可以通过配置认证策略，如果一个realm证认成功，不在执行第二个。
             AuthenticationStrategy：认证策略
         -->
-        <property name="authenticator" ref="modularRealmAuthenticator"/>
+        <!--<property name="authenticator" ref="modularRealmAuthenticator"/>-->
+        <property name="realms">
+            <list>
+                <ref bean="loginRealm"/>
+                <ref bean="userRealm"/>
+            </list>
+        </property>
     </bean>
 
     <!-- 多个realm认证 -->
@@ -29,7 +35,7 @@
         <property name="realms">
             <list>
                 <ref bean="loginRealm"/>
-                <ref bean="loginRealm2"/>
+                <ref bean="userRealm"/>
             </list>
         </property>
         <!-- 添加认证策略 -->
@@ -57,7 +63,7 @@
         </property>
     </bean>
 
-    <bean id="loginRealm2" class="com.shiro.mmc.system.web.premission.shiro.realm.UserRealm">
+    <bean id="userRealm" class="com.shiro.mmc.system.web.premission.shiro.realm.UserRealm">
         <!-- 指定realm的加密算法 -->
         <property name="credentialsMatcher">
             <!-- 加密 -->
@@ -71,12 +77,13 @@
                     org.apache.shiro.crypto.CryptoException: Unable to execute 'doFinal' with cipher instance [javax.crypto.Cipher@dc89d5e].
                 -->
                 <property name="storedCredentialsHexEncoded" value="true"/>
+
             </bean>
         </property>
     </bean>
 
 
-    <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
     <!-- 启用shrio注解，依赖 lifecycleBeanPostProcessor-->
     <!--<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"-->

@@ -1,11 +1,9 @@
-package com.shiro.mmc.system.web.premission.shiro.realm;
+package com.shiro.mmc.system.spring.common.shiro;
 
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.crypto.hash.SimpleHash;
-import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -16,25 +14,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @packageName：com.shiro.mmc.system.web.premission.shiro.realm
- * @desrciption: LoginRealm
+ * @packageName：com.shiro.mmc.system.spring.common.shiro
+ * @desrciption: 自定义认证领域
  * @author: gaowei
- * @date： 2017/12/4 21:34
+ * @date： 2017-12-07 17:23
  * @history: (version) author date desc
  */
-public class LoginRealm extends AuthorizingRealm {
+public class UserRealm extends AuthorizingRealm{
+
+    private static final Logger log = LoggerFactory.getLogger(UserRealm.class);
 
     /**
-     * AuthorizingRealm : 包含认证和授权操作
-     *
-     * AuthenticatingRealm ：包含认证操作
-     */
-
-    private static final Logger log = LoggerFactory.getLogger(LoginRealm.class);
-
-
-    /**
-     * 授权操作
+     * 授权认证
      * @param principalCollection
      * @return
      */
@@ -62,21 +53,20 @@ public class LoginRealm extends AuthorizingRealm {
     }
 
     /**
-     * 认证操作
-     * @param token
+     * 用户信息认证
+     * @param authenticationToken
      * @return
      * @throws AuthenticationException
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        log.debug("进入loginRealm {}", token);
-        // 1. 把AuthenticationToken 转换为 UsernamePasswordToken
-        UsernamePasswordToken upToken = (UsernamePasswordToken) token;
-        // 2. 从UsernamePasswordToken 中获取userName
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        log.debug("用户登录认证....");
+        UsernamePasswordToken upToken = (UsernamePasswordToken) authenticationToken;
+        // 登录用户信息
         String userName = upToken.getUsername();
-        log.debug("登录用户信息UserName:{}, password:{}", userName, upToken.getPassword());
-        // 3. 调用数据库的方法，从数据库中查询username 对应的记录
-        log.debug("从数据库中获取UserName：{} 对应的用户信息.", userName);
+        log.debug("用户登录认证 userName:{}", userName);
+
+        // 从数据库中取出用户信息
         // 4. 若用于不存在， 则可以抛出UnknownAccountException 异常
         if ("unknown".equals(userName)) {
             throw new UnknownAccountException("用户信息不存在！");
@@ -119,17 +109,4 @@ public class LoginRealm extends AuthorizingRealm {
 
         return authenticationInfo;
     }
-
-    public static void main(String[] args) {
-        // 模拟计算用户存储的密码加密后的值
-        String hashAlgorithmName = "MD5";
-        String credentials =  "123456";
-        String userName = "user";
-        Object salt = ByteSource.Util.bytes(userName);
-        int hashIterations = 1024;
-
-        Object result = new SimpleHash(hashAlgorithmName, credentials, salt, hashIterations);
-        System.out.println(result);
-    }
-
 }

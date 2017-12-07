@@ -13,6 +13,8 @@
         <module>shiro-web-premission</module>
         <module>shiro-authorization</module>
         <module>shiro-session</module>
+        <module>shiro-cache</module>
+        <module>shiro-spring</module>
     </modules>
 
 	<properties>

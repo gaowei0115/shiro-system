@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				[shiro-spring]%date [%thread] %-5level - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 控制层日志 -->
+	<appender name="controllerLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>../logs/exam_web_controller.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/%d{yyyyMMdd}/exam_web_controller.log</fileNamePattern>
+			<maxHistory>90</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>200MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			[shiro-spring]%date [%thread] %-5level [%X{UUID}] - %msg%n
+		</encoder>
+	</appender>
+
+	<!-- 业务层日志 -->
+	<appender name="serviceLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>../logs/exam_web_service.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/%d{yyyyMMdd}/exam_web_service.log</fileNamePattern>
+			<maxHistory>90</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>200MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			[shiro-spring]%date [%thread] %-5level [%X{UUID}] - %msg%n
+		</encoder>
+	</appender>
+
+	<!-- Common日志 -->
+	<appender name="commonLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>../logs/exam_web_common.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/%d{yyyyMMdd}/exam_web_common.log</fileNamePattern>
+			<maxHistory>90</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>200MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			[shiro-spring]%date [%thread] %-5level [%X{UUID}] - %msg%n
+		</encoder>
+	</appender>
+
+	<!-- other日志 -->
+	<appender name="otherLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>../logs/exam_web_other.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/%d{yyyyMMdd}/exam_web_other.log</fileNamePattern>
+			<maxHistory>90</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>200MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			[shiro-spring]%date [%thread] %-5level [%X{UUID}] - %msg%n
+		</encoder>
+	</appender>
+
+
+	<appender name="asyncConsole" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold >0</discardingThreshold>
+		<queueSize>512</queueSize>
+		<appender-ref ref="console"/>
+	</appender>
+
+	<!-- controllerLog -->
+	<appender name="asyncControllerLog" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold >0</discardingThreshold>
+		<queueSize>512</queueSize>
+		<appender-ref ref="controllerLog"/>
+	</appender>
+
+	<!-- serviceLog -->
+	<appender name="asyncServiceLog" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold >0</discardingThreshold>
+		<queueSize>512</queueSize>
+		<appender-ref ref="serviceLog"/>
+	</appender>
+
+	<!-- commonLog -->
+	<appender name="asyncCommonLog" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold >0</discardingThreshold>
+		<queueSize>512</queueSize>
+		<appender-ref ref="commonLog"/>
+	</appender>
+
+	<!-- otherLog -->
+	<appender name="asyncOtherLog" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold >0</discardingThreshold>
+		<queueSize>512</queueSize>
+		<appender-ref ref="otherLog"/>
+	</appender>
+	
+
+	<root level="DEBUG">
+		<appender-ref ref="asyncConsole"/>
+	</root>
+
+	<logger name="exam.web.controller" level="DEBUG" additivity="true">
+		<appender-ref ref="asyncControllerLog"/>
+	</logger>
+
+	<logger name="exam.web.service" level="DEBUG" additivity="true">
+		<appender-ref ref="asyncServiceLog"/>
+	</logger>
+
+	<logger name="exam.web.common" level="DEBUG" additivity="true">
+		<appender-ref ref="asyncCommonLog"/>
+	</logger>
+
+	<logger name="exam.web.other" level="DEBUG" additivity="true">
+		<appender-ref ref="asyncOtherLog"/>
+	</logger>
+	
+
+	<logger name="druid.sql" level="ERROR"/>
+	<logger name="jdbc.sqltiming" level="ERROR"/>
+	<logger name="com.ibatis" level="ERROR" />
+	<logger name="com.ibatis.common.jdbc.SimpleDataSource" level="ERROR" />
+	<logger name="com.ibatis.common.jdbc.ScriptRunner" level="ERROR" />
+	<logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate"
+			level="ERROR" />
+	<logger name="java.sql.Connection" level="ERROR" />
+	<logger name="java.sql.Statement" level="ERROR" />
+	<logger name="java.sql.PreparedStatement" level="ERROR" />
+	<logger name="java.sql.ResultSet" level="ERROR" />
+	
+	<logger name="org.springframework" level="ERROR"/>
+	
+</configuration>

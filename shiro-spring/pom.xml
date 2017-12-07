@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>shiro-system</artifactId>
+        <groupId>com.mmc.shiro.system</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.mmc.shiro.system.spring</groupId>
+    <artifactId>shiro-spring</artifactId>
+    <packaging>war</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <url>http://maven.apache.org</url>
+    <dependencies>
+        <!-- shiro jar 核心包-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+        </dependency>
+        <!-- shiro spring jar 与spring关联包 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+        </dependency>
+        <!-- shiro 缓存包 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+        </dependency>
+        <!-- shiro web-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>shiro-spring</finalName>
+    </build>
+</project>

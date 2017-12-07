@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <description>Shiro Congruation</description>
+
+    <!-- shiro securityManager 核心验证管理器-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+
+        <!-- realm -->
+        <property name="realm" ref="userRealm"/>
+    </bean>
+
+    <!-- userRealm-->
+    <bean id="userRealm" class="com.shiro.mmc.system.spring.common.shiro.UserRealm">
+        <!-- 指定加密验证方式 -->
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <!-- 加密算法指定 -->
+                <property name="hashAlgorithmName" value="MD5"/>
+                <!-- 加密次数 -->
+                <property name="hashIterations" value="1024"/>
+                <!--
+                    realm 登录时异常解决
+                    org.apache.shiro.crypto.CryptoException: Unable to execute 'doFinal' with cipher instance [javax.crypto.Cipher@dc89d5e].
+                -->
+                <property name="storedCredentialsHexEncoded" value="true"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 验证管理器 -->
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 登录页面 -->
+        <property name="loginUrl" value="/toLogin"/>
+        <!-- 登录成功页面 -->
+        <property name="successUrl" value="/toIndex"/>
+
+        <!-- 权限验证失败跳转页面 -->
+        <property name="unauthorizedUrl" value="/unauthorized"/>
+
+        <property name="filterChainDefinitions">
+            <value>
+                /login.jsp = anon
+                /login = anon
+                /logout = logout
+                /bootstrap/css/**=anon
+                /bootstrap/js/**=anon
+                /bootstrap/**=anon
+                /common/**=anon
+                /css/**=anon
+                /js/**=anon
+                /images/**=anon
+                /static/**=anon
+
+                /user.jsp = roles[user]
+                /admin.jsp = roles[admin]
+                # everything else requires authentication:
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+</beans>
