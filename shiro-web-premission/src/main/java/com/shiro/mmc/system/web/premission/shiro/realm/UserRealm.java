@@ -37,25 +37,18 @@ public class UserRealm extends AuthorizingRealm {
             throw new AuthorizationException(
                     "PrincipalCollection method argument cannot be null.");
         }
-
-        if (principalCollection == null) {
-            throw new AuthorizationException(
-                    "PrincipalCollection method argument cannot be null.");
-        }
-
-        String userName = (String) getAvailablePrincipal(principalCollection);
-        // 模拟用户角色
+        // 1. 从principalCollection获取登录用户信息
+        String userName = (String) principalCollection.getPrimaryPrincipal();
+        // 2. 利用登录用户信息来获取当前用户角色或权限（需要从数据库中获取）
         Set<String> roles = new HashSet<>();
-        if ("user".equals(userName)) {
-            roles.add("user");
-        } else if ("admin".equals(userName)) {
-            roles.add("admin");
-        } else {
-            roles.add("user");
+        roles.add("user");
+        if ("admin".equals(userName)) {
             roles.add("admin");
         }
+        // 3. 创建SimpleAuthorizationInfo，并设置roles属性
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.addRoles(roles);
+        info.setRoles(roles);
+        // 4. 返回SimpleAuthorizationInfo
         return info;
     }
 
